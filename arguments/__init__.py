@@ -163,10 +163,16 @@ class OptimizationParams(ParamGroup):
 
         super().__init__(parser, "Optimization Parameters")
 
-def get_combined_args(parser : ArgumentParser):
+def get_combined_args(parser : ArgumentParser, args=None):
     cmdlne_string = sys.argv[1:]
     cfgfile_string = "Namespace()"
-    args_cmdline = parser.parse_args(cmdlne_string)
+    args_cmdline, _ = parser.parse_known_args(cmdlne_string)
+    merged_dict = vars(args_cmdline).copy()
+    if args is not None:
+        for k,v in vars(args).items():
+            if v != None:
+                merged_dict[k] = v
+    args_cmdline = Namespace(**merged_dict)
 
     try:
         cfgfilepath = os.path.join(args_cmdline.model_path, "cfg_args")
