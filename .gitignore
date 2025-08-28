@@ -9,7 +9,8 @@ wandb*
 data
 *build/*
 *__pycache__*
-diff_rasterization/diff_rast.egg-info
+submodules/diff-gaussian-rasterization/diff_gaussian_rasterization.egg-info
+submodules/diff-gaussian-rasterization/build
 diff_rasterization/dist
 tensorboard_3d
 screenshots
