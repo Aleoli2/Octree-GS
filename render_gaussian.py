@@ -9,6 +9,7 @@
 # For inquiries contact  george.drettakis@inria.fr
 #
 
+import os
 import torch
 from torch import nn
 from scene import Scene
@@ -20,6 +21,7 @@ from utils.graphics_utils import getProjectionMatrix, focal2fov
 import time
 import numpy as np
 import cv2
+import json
 
 
 class View(nn.Module):
@@ -69,17 +71,14 @@ class Renderer():
         parser.add_argument("--iteration", default=-1, type=int)
         args = get_combined_args(parser, args)
 
-        camera_model_path = args.camera_model
+        camera_model_path = os.path.join(args.model_path, "cameras.json")
         with open(camera_model_path, 'r') as f:
-            for line in f:
-                if line.startswith("#"):
-                    continue
-                data = line.split(" ")
-                break
-        self.camera_model = { "fl_x": float(data[4]),
-        "fl_y": float(data[5]),
-        "w": float(data[2]),
-        "h": float(data[3])}
+            data = json.load(f)
+            data = data[0]
+        self.camera_model = { "fl_x": float(data["fx"]),
+        "fl_y": float(data["fy"]),
+        "w": float(data["width"]),
+        "h": float(data["height"]) }
 
         dataset = self.model.extract(args)
         self.pipeline = self.pipeline.extract(args)
