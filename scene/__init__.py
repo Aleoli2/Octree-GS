@@ -49,7 +49,10 @@ class Scene:
                                                             "iteration_" + str(self.loaded_iter)))
             print("Load Voxel Size: ", self.gaussians.voxel_size)
             print("Load Standard Dist: ", self.gaussians.standard_dist)
-            return
+
+            #Allow load model without source data
+            if not os.path.exists(args.source_path):
+                return
 
         self.train_cameras = {}
         self.test_cameras = {}
@@ -88,16 +91,16 @@ class Scene:
             print("Loading Test Cameras")
             self.test_cameras[resolution_scale] = cameraList_from_camInfos(scene_info.test_cameras, resolution_scale, args)
 
-
-        if args.random_background:
-            logger.info("Using random background")
-        elif args.white_background:
-            logger.info("Using white background")
-        else:
-            logger.info("Using black background")
-        points = torch.unique(points, dim=0)
-        self.gaussians.set_level(points, self.train_cameras, self.resolution_scales, args.dist_ratio, args.init_level, args.levels)
-        self.gaussians.create_from_pcd(points, self.cameras_extent, logger)
+        if not self.loaded_iter:
+            if args.random_background:
+                logger.info("Using random background")
+            elif args.white_background:
+                logger.info("Using white background")
+            else:
+                logger.info("Using black background")
+            points = torch.unique(points, dim=0)
+            self.gaussians.set_level(points, self.train_cameras, self.resolution_scales, args.dist_ratio, args.init_level, args.levels)
+            self.gaussians.create_from_pcd(points, self.cameras_extent, logger)
 
     def save_ply(self, pcd, ratio, path):
         points = torch.tensor(pcd.points[::ratio]).float().cuda()
