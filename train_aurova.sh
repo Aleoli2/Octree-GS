@@ -27,8 +27,8 @@ extra_up=0.01
 
 time=$(date "+%y_%m_%d_%H_%M")
 
-python train.py --eval -s /workspace/data/${NAME} -r ${resolution} --gpu ${gpu} --fork ${fork} --ratio ${ratio} \
-    --iterations ${iterations} --port $port -m /workspace/outputs/${NAME}/Octotree-GS/$time --appearance_dim ${appearance_dim} \
+python train.py --eval -s /workspace/data -r ${resolution} --gpu ${gpu} --fork ${fork} --ratio ${ratio} \
+    --iterations ${iterations} --port $port -m /workspace/outputs/${NAME}/Octree-GS/$time --appearance_dim ${appearance_dim} \
     --visible_threshold ${visible_threshold}  --base_layer ${base_layer} --dist2level ${dist2level} --update_ratio ${update_ratio} \
     --progressive --init_level ${init_level} --dist_ratio ${dist_ratio} --levels ${levels}  \
     --extra_ratio ${extra_ratio} --extra_up ${extra_up}  
